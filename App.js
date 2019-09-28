@@ -19,7 +19,9 @@ class App extends Component {
       breedDogStore:'',
       breedPuppyStore:'',
       dogName: '',
-      dogPersonality:''
+      dogPersonality:'',
+      parentOne: undefined,
+      parentTwo: undefined
     }
     this.toggle = this.toggle.bind(this);
     this.pupClick = this.pupClick.bind(this);
@@ -28,27 +30,38 @@ class App extends Component {
     this.handleInputChange = this.handleInputChange.bind(this)
     this.chooseBreed = this.chooseBreed.bind(this)
     this.creationOfDog = this.creationOfDog.bind(this)
+    this.parentStore = this.parentStore.bind(this)
+    this.creationOfPuppy = this.creationOfPuppy.bind(this)
   }
 
+  parentStore(parent){
+    if(this.state.parentOne !== undefined){
+      this.setState({parentTwo: parent})
+    } else{
+      this.setState({parentOne: parent})
+    }
+  }
 
   chooseBreed(dog, puppy){
     this.setState({
       breedDogStore: dog,
       breedPuppyStore: puppy
     })
-    console.log(this.state.breedDogStore)
   }
 
   pupInteractions(action, pup){
     if(action === 'feed'){
       Pupfunctions.feed(pup);
       Pupfunctions.getOlder(pup);
+      this.agechecker(pup)
     } else if (action === 'nap'){
       Pupfunctions.nap(pup);
       Pupfunctions.getOlder(pup);
+      this.agechecker(pup)
     } else if (action === 'play'){
       Pupfunctions.play(pup);
       Pupfunctions.getOlder(pup);
+      this.agechecker(pup)
     }
     this.setState(
       {currentPup: pup}
@@ -62,19 +75,31 @@ class App extends Component {
   }
 
   agechecker(pup){
-   if(pup.age >= 5){
-    
+   if(pup.age >= 5 && pup.isPup === true){
+    pup.image = pup.breedDog
    }
   }
 
-  creationOfDog(){
-    const name = CreateAPupfunctions.Dog(this.state.dogName, this.state.dogPersonality, this.state.breedDogStore, this.state.breedPuppyStore);
-    const listOfPups = this.state.pupList
-    console.log(name)
-    listOfPups.push(name)
+  creationOfPuppy(){
+    const puppy = CreateAPupfunctions.Puppy(this.state.dogName, this.state.parentOne, this.state.parentTwo);
+    const listOfPups = this.state.pupList;
+    listOfPups.push(puppy)
+    console.log(puppy)
     this.setState({
       pupList: listOfPups,
-      currentPup: name
+      currentPup: puppy,
+      parentOne: undefined,
+      parentTwo: undefined
+    })
+  }
+
+  creationOfDog(){
+    const dog = CreateAPupfunctions.Dog(this.state.dogName, this.state.dogPersonality, this.state.breedDogStore, this.state.breedPuppyStore);
+    const listOfPups = this.state.pupList
+    listOfPups.push(dog)
+    this.setState({
+      pupList: listOfPups,
+      currentPup: dog
     })
   }
 
@@ -84,7 +109,6 @@ class App extends Component {
   }
 
   toggle(name){
-    console.log(name)
     this.setState({
       [name]: !this.state[name]
     })
@@ -104,6 +128,9 @@ class App extends Component {
             handleInputChange={this.handleInputChange}
             chooseBreed={this.chooseBreed}
             creationOfDog={this.creationOfDog}
+            creationOfPuppy={this.creationOfPuppy}
+            parentStore={this.parentStore}
+            pups={this.state.pupList}
             />
           }
           {this.state.cpOn && <CurrentPup pup={this.state.currentPup} pupInteractions={this.pupInteractions}/>}

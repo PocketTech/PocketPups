@@ -14,13 +14,14 @@ const Dog = function(name, personality, breedDog, breedPuppy){
 };
 
 const Puppy = function(name, parentOne, parentTwo){ 
-  Dog.call(this, name); 
-  this.age = 1;
-  this.personality = parentOne.personality;
-  this.isPup = true;
-  this.image = parentTwo.breedPuppy
-  this.breedDog = parentTwo.breedDog;
-  this.breedPuppy = parentTwo.breedPuppy;
+  const obj = Dog.call(this, name); 
+  obj.age = 1;
+  obj.personality = parentOne.personality;
+  obj.isPup = true;
+  obj.image = parentTwo.breedPuppy
+  obj.breedDog = parentTwo.breedDog;
+  obj.breedPuppy = parentTwo.breedPuppy;
+  return obj
 }
 
 Puppy.prototype = Object.create(Dog.prototype); 

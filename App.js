@@ -84,7 +84,6 @@ class App extends Component {
     const puppy = CreateAPupfunctions.Puppy(this.state.dogName, this.state.parentOne, this.state.parentTwo);
     const listOfPups = this.state.pupList;
     listOfPups.push(puppy)
-    console.log(puppy)
     this.setState({
       pupList: listOfPups,
       currentPup: puppy,

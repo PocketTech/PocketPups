@@ -20,9 +20,9 @@ const CurrentPup = (props) => (
             <Text>Energy: {props.pup.energy}</Text>
         </View>
         <View>
-            <Button title="Play"/>
-            <Button title="Feed"/>
-            <Button title="Nap"/>
+            <Button title="Play" onPress={() =>{props.pupInteractions("play", props.pup)}}/>
+            <Button title="Feed" onPress={() =>{props.pupInteractions("feed", props.pup)}}/>
+            <Button title="Nap"  onPress={() =>{props.pupInteractions("nap", props.pup)}}/>
         </View>
       </View>
     );

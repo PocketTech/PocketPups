@@ -6,16 +6,19 @@ import PupList from './Components/PupList';
 import dogData from './data/examplePupData.js';
 import Pupfunctions from './App Logic/PupFunctions';
 import CreateAPupfunctions from './App Logic/CreateAPupFunctions';
+import axios from 'axios'
 
 class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      currentPup: dogData[0],
-      pupList: dogData,
-      cpOn: true,
+      currentPup:{},
+      pupList: [],
+      cpOn: false,
       plOn: false,
       capOn: false,
+      cDT: false,
+      cPT:false,
       breedDogStore:'',
       breedPuppyStore:'',
       dogName: '',
@@ -32,6 +35,9 @@ class App extends Component {
     this.creationOfDog = this.creationOfDog.bind(this)
     this.parentStore = this.parentStore.bind(this)
     this.creationOfPuppy = this.creationOfPuppy.bind(this)
+    this.getPups = this.getPups.bind(this)
+    this.componentDidMount = this.componentDidMount.bind(this)
+    this.creationCall = this.creationCall.bind(this)
   }
 
   parentStore(parent){
@@ -80,13 +86,40 @@ class App extends Component {
    }
   }
 
+  getPups(){
+    axios.get('http://172.17.237.17:3000/pups')
+      .then((response) => {
+        this.setState({
+          currentPup: response.data[0],
+          pupList: response.data
+        })
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+  }
+
+  componentDidMount(){
+    this.getPups()
+  }
+
+  creationCall(pup){
+     pup.id = CreateAPupfunctions.pupCounter
+     CreateAPupfunctions.pupCounter++
+    axios.post('http://172.17.237.17:3000/pups', pup)
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+    this.getPups()
+  }
+
   creationOfPuppy(){
     const puppy = CreateAPupfunctions.Puppy(this.state.dogName, this.state.parentOne, this.state.parentTwo);
-    const listOfPups = this.state.pupList;
-    listOfPups.push(puppy)
+    this.creationCall(puppy)
     this.setState({
-      pupList: listOfPups,
-      currentPup: puppy,
       parentOne: undefined,
       parentTwo: undefined
     })
@@ -94,12 +127,7 @@ class App extends Component {
 
   creationOfDog(){
     const dog = CreateAPupfunctions.Dog(this.state.dogName, this.state.dogPersonality, this.state.breedDogStore, this.state.breedPuppyStore);
-    const listOfPups = this.state.pupList
-    listOfPups.push(dog)
-    this.setState({
-      pupList: listOfPups,
-      currentPup: dog
-    })
+    this.creationCall(dog)
   }
 
   pupClick(pup) {
@@ -130,13 +158,16 @@ class App extends Component {
             creationOfPuppy={this.creationOfPuppy}
             parentStore={this.parentStore}
             pups={this.state.pupList}
+            toggle={this.toggle}
+            cDT={this.state.cDT}
+            cPT={this.state.cPT}
             />
           }
           {this.state.cpOn && <CurrentPup pup={this.state.currentPup} pupInteractions={this.pupInteractions}/>}
           {this.state.plOn && <PupList pups={this.state.pupList} pupClick={this.pupClick}/>}
         </View>
         <View>
-          <Button title="Current Pup" className="cpOn" onPress={ () => {this.toggle("cpOn")}} />
+          <Button title="Current Pup" className="cpOn" onPress={() => {this.toggle("cpOn")}} />
           <Button title="Pup List" className="plOn" onPress={() => {this.toggle("plOn")}}/>
           <Button title="Create a Pup" className="capOn" onPress={() => {this.toggle("capOn")}}/>
         </View>

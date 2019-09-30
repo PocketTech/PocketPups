@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/PupDatabase');
 
 let pupListSchema = mongoose.Schema({
+  "id": Number,
   "name": String,
   "age": Number,
   "hunger": Number,

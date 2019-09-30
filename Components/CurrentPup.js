@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Text, View, Image} from 'react-native';
-
-const imageNames = {
-    cutepup: require('../Images/richard-brutyo-Sg3XwuEpybU-unsplash.jpg'),
- };
+import data from '../App Logic/PupImages.js'
 
 const CurrentPup = (props) => (
       <View>
@@ -11,7 +8,7 @@ const CurrentPup = (props) => (
             <Text>{props.pup.name}</Text>
         </View>
         <View>
-          <Image source={imageNames[props.pup.image]}/>
+          <Image source={data.images['labDog']}/>
         </View>
         <View>
             <Text>Age: {props.pup.age}</Text>

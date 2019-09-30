@@ -24,8 +24,10 @@ const Puppy = function(name, parentOne, parentTwo){
   return obj
 }
 
+let pupCounter = 1;
 Puppy.prototype = Object.create(Dog.prototype); 
 Puppy.prototype.constructor = Puppy;
 
+module.exports.pupCounter = pupCounter;
 module.exports.Dog = Dog;
 module.exports.Puppy= Puppy;

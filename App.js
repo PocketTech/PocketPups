@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Text, View, ScrollView} from 'react-native';
+import { Button, Text, View, ScrollView, StyleSheet, TouchableOpacity} from 'react-native';
 import CreateAPup from './Components/CreateAPup';
 import CurrentPup from './Components/CurrentPup';
 import PupList from './Components/PupList';
@@ -7,6 +7,7 @@ import dogData from './data/examplePupData.js';
 import Pupfunctions from './App Logic/PupFunctions';
 import CreateAPupfunctions from './App Logic/CreateAPupFunctions';
 import axios from 'axios'
+
 
 class App extends Component {
   constructor(props){
@@ -123,6 +124,8 @@ class App extends Component {
       parentOne: undefined,
       parentTwo: undefined
     })
+    this.toggle('cpOn')
+    this.toggle('capOn')
   }
 
   creationOfDog(){
@@ -131,8 +134,11 @@ class App extends Component {
   }
 
   pupClick(pup) {
-    this.setState({currentPup: pup})
+    this.setState({
+      currentPup: pup
+    })
     this.toggle('cpOn')
+    this.toggle('plOn')
   }
 
   toggle(name){
@@ -145,10 +151,10 @@ class App extends Component {
     return (
       <View>
        <ScrollView>
-        <View>
-          <Text>Pocket Pups</Text>
+        <View style={styles.center}>
+          <Text style={styles.white}>Pocket Pups</Text>
         </View>
-        <View>
+        <View style={styles.main}>
           {this.state.capOn && 
             <CreateAPup 
             creationOfDog= {this.creationOfDog} 
@@ -166,15 +172,66 @@ class App extends Component {
           {this.state.cpOn && <CurrentPup pup={this.state.currentPup} pupInteractions={this.pupInteractions}/>}
           {this.state.plOn && <PupList pups={this.state.pupList} pupClick={this.pupClick}/>}
         </View>
-        <View>
-          <Button title="Current Pup" className="cpOn" onPress={() => {this.toggle("cpOn")}} />
-          <Button title="Pup List" className="plOn" onPress={() => {this.toggle("plOn")}}/>
-          <Button title="Create a Pup" className="capOn" onPress={() => {this.toggle("capOn")}}/>
+        <View style={styles.bottomView}>
+          <View style={styles.buttonView}>
+            <TouchableOpacity  onPress={() => {this.toggle("cpOn")}} style={styles.buttonBorder}>
+              <Text style={styles.buttonText}> Current Pup </Text>
+            </TouchableOpacity>
+            <TouchableOpacity  onPress={() => {this.toggle("plOn")}} style={styles.buttonBorder}>
+              <Text style={styles.buttonText}> Pup List </Text>
+            </TouchableOpacity>
+            <TouchableOpacity  onPress={() => {this.toggle("capOn")}} style={styles.buttonBorder}>
+              <Text style={styles.buttonText}> Create a Pup </Text>
+            </TouchableOpacity>
+          </View>
         </View>
         </ScrollView>
       </View>
     );
   }
 };
+
+const styles = StyleSheet.create({
+  white: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 30,
+  },
+  main:{
+    height: 560,
+    flex: 3
+  },
+  center: {
+    alignItems: 'center',
+    backgroundColor: "#80aaff"
+  },
+  bottomView:{
+    backgroundColor: "#80aaff",
+    alignItems: 'center',
+    justifyContent:'center'
+  },
+  buttonView:{
+    height: 60,
+    flexDirection: 'row',
+  },
+  buttonText:{
+    color:'white',
+    fontWeight: 'bold',
+    fontSize: 20,
+    padding: 15
+  },
+  buttonBorder:{
+    borderWidth: 1,
+    borderColor: '#fff',
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+    overflow: "hidden",
+    borderWidth: 3,
+  },
+
+});
 
 export default App;

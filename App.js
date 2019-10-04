@@ -39,6 +39,7 @@ class App extends Component {
     this.getPups = this.getPups.bind(this)
     this.componentDidMount = this.componentDidMount.bind(this)
     this.creationCall = this.creationCall.bind(this)
+    this.toggleSort = this.toggleSort.bind(this)
   }
 
   parentStore(parent){
@@ -126,11 +127,13 @@ class App extends Component {
     })
     this.toggle('cpOn')
     this.toggle('capOn')
+    this.getPups()
   }
 
   creationOfDog(){
     const dog = CreateAPupfunctions.Dog(this.state.dogName, this.state.dogPersonality, this.state.breedDogStore, this.state.breedPuppyStore);
     this.creationCall(dog)
+    this.getPups()
   }
 
   pupClick(pup) {
@@ -138,13 +141,38 @@ class App extends Component {
       currentPup: pup
     })
     this.toggle('cpOn')
-    this.toggle('plOn')
+  }
+
+  toggleSort(name){
+    if (name === 'cpOn'){
+      this.setState({
+        cpOn: true,
+        plOn: false,
+        capOn:false
+      })
+    } else if (name === 'plOn'){
+      this.setState({
+        cpOn: false,
+        plOn: true,
+        capOn: false
+      })
+    } else if(name === 'capOn'){
+      this.setState({
+        cpOn: false,
+        plOn: false,
+        capOn: true
+      })
+    }
   }
 
   toggle(name){
-    this.setState({
-      [name]: !this.state[name]
-    })
+    if(name === 'cpOn' || name === 'plOn'|| name === 'capOn'){
+      this.toggleSort(name)
+    } else {
+      this.setState({
+        [name]: !this.state[name]
+      })
+    }
   }
 
   render(){

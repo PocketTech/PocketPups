@@ -10,7 +10,7 @@ const CreateAPuppy = (props) => (
             {props.pups.map((oneP) => {
               if(!oneP.isPup){
                 return (
-                  <View style={styles.padding}>
+                  <View key={oneP.id} style={styles.padding}>
                     <View style={styles.textView}>
                         <Text  style={styles.buttonText} onPress = {(pup) => {props.parentStore(oneP)}}> {oneP.name}</Text>
                     </View>

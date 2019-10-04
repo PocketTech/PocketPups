@@ -8,8 +8,8 @@ const PupList = (props) => (
             <Text style={styles.descriptionText}>Click on a Pup's name to interact with it! </Text>
           </View>
           <View>
-            {props.pups.map((oneP) => (
-              <View style={styles.spacer}>
+            {props.pups.map((oneP, index) => (
+              <View key={index} style={styles.spacer}>
                 <View style={styles.boxSpace}>
                   <Text style={styles.white} onPress = {(pup) => {props.pupClick(oneP)}} > {oneP.name}</Text>
                 </View>
